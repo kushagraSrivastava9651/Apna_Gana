@@ -1,72 +1,47 @@
-package com.example.musicappui.ui.theme
-/*
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-
-@Composable
-
-fun TitleDescriptionScreen(itemId: Int, title: String, description: String) {
-    Column(
-        modifier = Modifier.padding(16.dp)
-    ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.h4
-        )
-        Text(
-            text = description,
-            style = MaterialTheme.typography.body1,
-            modifier = Modifier.padding(top = 8.dp)
-        )
-    }
-}
-
-@Preview
-@Composable
-fun PreviewTitleDescriptionScreen() {
-    TitleDescriptionScreen(
-        itemId = 1,
-        title = "Welcome to My App",
-        description = "This is a sample description of the app."
-    )
-}
-
- */
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.musicappui.R // Replace R with your actual package name
 
 @Composable
-fun TitleDescriptionScreen(itemId: Int, title: String, description: String) {
+fun TitleDescriptionScreen(itemId: Int, title: String, description: String, drawableResId: Int) {
     Column(
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier.padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = title,
             style = MaterialTheme.typography.h4,
-            color = MaterialTheme.colors.primary, // Change color to primary color
+            color = MaterialTheme.colors.primary,
             modifier = Modifier.padding(bottom = 8.dp),
-            textAlign = TextAlign.Center // Center align text
+            textAlign = TextAlign.Center
         )
+
+        // Image below title
+        val painter: Painter = painterResource(drawableResId)
+        Image(
+            painter = painter,
+            contentDescription = null, // Provide appropriate content description
+            modifier = Modifier
+                .size(120.dp)
+                .padding(bottom = 16.dp) // Add padding below the image
+        )
+
         Text(
             text = description,
             style = MaterialTheme.typography.body1,
-            color = Color.Gray, // Change color to gray
-            textAlign = TextAlign.Justify // Justify align text
+            color = Color.Gray,
+            textAlign = TextAlign.Justify
         )
     }
 }
@@ -77,6 +52,7 @@ fun PreviewTitleDescriptionScreen() {
     TitleDescriptionScreen(
         itemId = 1,
         title = "Welcome to My App",
-        description = "This is a sample description of the app. It can be longer to demonstrate how text wraps within the composable."
+        description = "This is a sample description of the app. It can be longer to demonstrate how text wraps within the composable.",
+        drawableResId = R.drawable.image1 // Replace sample_drawable with your actual drawable resource ID
     )
 }

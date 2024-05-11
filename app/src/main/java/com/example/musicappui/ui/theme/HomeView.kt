@@ -27,8 +27,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.musicappui.R
 
@@ -48,7 +50,15 @@ fun HomeView(navController: NavController) {
     LazyColumn {
         grouped.forEach {
             stickyHeader {
-                Text(text = it.value[0], modifier = Modifier.padding(16.dp))
+                Text(
+                    text = it.value[0],
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .padding(bottom = 8.dp), // Add bottom padding for subheading spacing
+                    style = MaterialTheme.typography.subtitle1
+                        .copy(fontWeight = FontWeight.Bold, fontSize = 18.sp) // Set bold and medium size
+                )
+
                 LazyRow {
                     items(category) { item ->
                         BrowserItem(
@@ -88,15 +98,16 @@ fun BrowserItem(item: Item, drawable: Int, onItemClick: () -> Unit) {
             ) {
                 Text(
                     text = item.title,
-                    style = MaterialTheme.typography.h6, // Use h6 typography for title
+                    style = MaterialTheme.typography.h6.copy(fontWeight = FontWeight.Bold), // Bold but normal size
                     color = Color.Black, // Set title color to black
                     modifier = Modifier.padding(8.dp) // Add padding to title text
                 )
+
             }
             Spacer(modifier = Modifier.height(8.dp))
 
             Image(
-                painter = painterResource(id = drawable),
+                painter = painterResource(id = item.drawableResId),
                 contentDescription = item.title,
                 modifier = Modifier.size(100.dp)
             )
@@ -108,7 +119,7 @@ fun BrowserItem(item: Item, drawable: Int, onItemClick: () -> Unit) {
 @Composable
 fun PreviewBrowserItem() {
     BrowserItem(
-        item = Item(id = 1, title = "Sample Item", description = "This is a sample item"),
+        item = Item(id = 1, title = "Sample Item", description = "This is a sample item",   R.drawable.image1),
         drawable = R.drawable.baseline_apps_24,
         onItemClick = {}
     )

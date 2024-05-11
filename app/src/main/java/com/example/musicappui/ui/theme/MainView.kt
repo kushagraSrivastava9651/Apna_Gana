@@ -1,6 +1,7 @@
 package com.example.musicappui.ui
 
 
+import TitleDescriptionScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -69,7 +70,7 @@ import com.example.musicappui.ui.theme.HomeView
 import com.example.musicappui.ui.theme.Item
 import com.example.musicappui.ui.theme.Library
 import com.example.musicappui.ui.theme.SubscriptionView
-import com.example.musicappui.ui.theme.TitleDescriptionScreen
+
 import com.example.musicappui.ui.theme.category
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -290,7 +291,9 @@ fun Navigation(navController:NavController,viewModel: MainViewModel,pd:PaddingVa
                 TitleDescriptionScreen(
                     itemId = it.id,
                     title = it.title,
-                    description = it.description
+                    description = it.description,
+                    drawableResId = it.drawableResId
+
                 )
             } ?: run {
                 // Handle case where item is not found
