@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-android")
     id ("kotlin-parcelize")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -53,6 +54,11 @@ android {
 
 dependencies {
 
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
+ 
+
+
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("com.google.code.gson:gson:2.10")
@@ -79,6 +85,11 @@ dependencies {
 
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.8.0")
 
+    //fire
+    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
 
 
     implementation ("androidx.compose.runtime:runtime-livedata:1.6.7")

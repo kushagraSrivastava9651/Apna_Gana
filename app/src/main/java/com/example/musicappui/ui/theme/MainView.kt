@@ -79,7 +79,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
-fun MainView() {
+fun MainView(navController: NavController) {
     val fetchNewsViewModel: FetchNewsViewModel = viewModel()
     val categoriesState by fetchNewsViewModel.categoriesState
 
