@@ -66,12 +66,13 @@ import com.example.musicappui.ui.theme.AccountDialog
 import com.example.musicappui.ui.theme.AccountView
 
 import com.example.musicappui.ui.theme.BrowseView
+import com.example.musicappui.ui.theme.FetchNewsViewModel
 import com.example.musicappui.ui.theme.HomeView
 import com.example.musicappui.ui.theme.Item
 import com.example.musicappui.ui.theme.Library
 import com.example.musicappui.ui.theme.SubscriptionView
 
-import com.example.musicappui.ui.theme.category
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -79,6 +80,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun MainView() {
+    val fetchNewsViewModel: FetchNewsViewModel = viewModel()
+    val categoriesState by fetchNewsViewModel.categoriesState
 
     val scaffoldState :ScaffoldState= rememberScaffoldState()
     val scope: CoroutineScope= rememberCoroutineScope()
@@ -276,23 +279,25 @@ fun Navigation(navController:NavController,viewModel: MainViewModel,pd:PaddingVa
         modifier = Modifier.padding(pd)){
 
 
-
         composable(Screen.BottomScreen.Home.bRoute){
             //TODO home screen
             HomeView(navController)
         }
+
         composable(
             route = "details/{itemId}",
             arguments = listOf(navArgument("itemId") { type = NavType.IntType; defaultValue = 0 })
         ) { backStackEntry ->
+            val fetchNewsViewModel: FetchNewsViewModel = viewModel()
+            val categoriesState by fetchNewsViewModel.categoriesState
             val itemId = backStackEntry.arguments?.getInt("itemId") ?: 0
-            val item = category.find { it.id == itemId }
+            val item = categoriesState.list.find { it.id == itemId }
             item?.let {
                 TitleDescriptionScreen(
                     itemId = it.id,
                     title = it.title,
                     description = it.description,
-                    drawableResId = it.drawableResId
+                       it.image
 
                 )
             } ?: run {
