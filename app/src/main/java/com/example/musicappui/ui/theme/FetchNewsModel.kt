@@ -40,7 +40,7 @@ class FetchNewsViewModel : ViewModel() {
 
     data class RecipeState(
         val loading: Boolean = true,
-        val list: List<Item> = emptyList(),
+        var list: List<Item> = emptyList(),
         val error: String? = null
     )
 }

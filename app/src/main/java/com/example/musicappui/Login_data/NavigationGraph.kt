@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.musicappui.chat.Content
 import com.example.musicappui.ui.MainView
 
 @Composable
@@ -34,6 +35,8 @@ fun NavigationGraph(
         composable(Screen.MainView.route) {
             MainView(navController = navController)
         }
+
+
     }
 
 }

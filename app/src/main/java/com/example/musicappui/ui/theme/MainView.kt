@@ -9,14 +9,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -33,8 +36,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.primarySurface
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material.rememberModalBottomSheetState
@@ -43,9 +46,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -60,15 +66,16 @@ import androidx.navigation.navArgument
 import com.example.musicappui.MainViewModel
 import com.example.musicappui.R
 import com.example.musicappui.Screen
+import com.example.musicappui.chat.Content
+
 import com.example.musicappui.screensInBottom
 import com.example.musicappui.screensInDrawer
 import com.example.musicappui.ui.theme.AccountDialog
 import com.example.musicappui.ui.theme.AccountView
 
 import com.example.musicappui.ui.theme.BrowseView
-import com.example.musicappui.ui.theme.FetchNewsViewModel
+ import com.example.musicappui.ui.theme.FetchNewsViewModel
 import com.example.musicappui.ui.theme.HomeView
-import com.example.musicappui.ui.theme.Item
 import com.example.musicappui.ui.theme.Library
 import com.example.musicappui.ui.theme.SubscriptionView
 
@@ -118,7 +125,7 @@ fun MainView(navController: NavController) {
     val currentRoute =navBackStackEntry?.destination?.route
 
     val bottomBar :@Composable ()->Unit={
-        if(currentScreen is Screen.DrawerScreen||currentScreen ==Screen.BottomScreen.Home){
+        if(currentScreen is Screen.DrawerScreen||currentScreen == Screen.BottomScreen.Home){
             BottomNavigation(Modifier.wrapContentSize()) {
                     screensInBottom.forEach{
                         item->
@@ -148,10 +155,10 @@ fun MainView(navController: NavController) {
         sheetShape = RoundedCornerShape(topStart = roundedCornerRadius, topEnd = roundedCornerRadius),
         sheetContent ={
 
-           MoreBottomSheet(modifier=modifier)
+           MoreBottomSheet(modifier=modifier,controller)
     } ) {
         Scaffold(
-            bottomBar=bottomBar,
+            bottomBar=  bottomBar ,
             topBar = {
                 TopAppBar(title = { Text(title.value) },
                     actions = {
@@ -213,9 +220,9 @@ fun MainView(navController: NavController) {
 
 @Composable
 fun DrawerIem(
-         selected:Boolean,
-         item:Screen.DrawerScreen,
-         onDrawerItemClicked :() ->Unit
+    selected:Boolean,
+    item: Screen.DrawerScreen,
+    onDrawerItemClicked :() ->Unit
 ){
     val background = if (selected) Color.DarkGray else Color.White
     Row(
@@ -240,33 +247,121 @@ fun DrawerIem(
 }
 
 @Composable
-fun MoreBottomSheet(modifier: Modifier){
+fun MoreBottomSheet(modifier: Modifier,navController: NavController){
     Box(
         Modifier
             .fillMaxWidth()
             .height(300.dp)
             .background(MaterialTheme.colors.primarySurface)){
            Column (modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.SpaceBetween){
-                 Row(modifier = modifier.padding(16.dp)){
+               /*  Row(modifier = modifier.padding(16.dp)){
                      Icon(modifier = Modifier.padding(8.dp),
                   painter=   painterResource(id = R.drawable.baseline_settings_24), contentDescription = "Settings")
                      Text(text = "Setting", fontSize = 20.sp, color = Color.White)
 
                  }
 
-               Row(modifier = modifier.padding(16.dp)){
+                */
+
+               Row(
+                   modifier = Modifier.padding(16.dp),
+                   verticalAlignment = Alignment.CenterVertically
+               ) {
+                   Box(
+                       modifier = Modifier
+                           .size(48.dp)
+                           .clip(CircleShape)
+                           .background(Color.LightGray)
+                           .clickable {
+                               //navController.navigate("chat_screen")
+                           },
+                       contentAlignment = Alignment.Center
+                   ) {
+                       Icon(
+                           modifier = Modifier.padding(8.dp),
+                           painter = painterResource(id = R.drawable.baseline_settings_24),
+                           contentDescription = "Settings",
+                           tint = Color.Black // Adjust the tint color as needed
+                       )
+                   }
+                   Spacer(modifier = Modifier.width(8.dp))
+                   Text(
+                       text = "Settings",
+                       fontSize = 20.sp,
+                       color = Color.White,
+                       fontWeight = FontWeight.Bold // Adjust the text style as needed
+                   )
+               }
+
+            /*   Row(modifier = modifier.padding(16.dp)){
                    Icon(modifier = Modifier.padding(8.dp),
                        painter=   painterResource(id = R.drawable.baseline_share_24), contentDescription = "Settings")
                    Text(text = "Share", fontSize = 20.sp, color = Color.White)
 
                }
 
-               Row(modifier = modifier.padding(16.dp)){
-                   Icon(modifier = Modifier.padding(8.dp),
-                       painter=   painterResource(id = R.drawable.baseline_help_center_24), contentDescription = "Help")
-                   Text(text = "Help", fontSize = 20.sp, color = Color.White)
-
+             */
+               Row(
+                   modifier = Modifier.padding(16.dp),
+                   verticalAlignment = Alignment.CenterVertically
+               ) {
+                   Box(
+                       modifier = Modifier
+                           .size(48.dp)
+                           .clip(CircleShape)
+                           .background(Color.LightGray)
+                           .clickable {
+                               //navController.navigate("chat_screen")
+                           },
+                       contentAlignment = Alignment.Center
+                   ) {
+                       Icon(
+                           modifier = Modifier.padding(8.dp),
+                           painter = painterResource(id = R.drawable.baseline_share_24),
+                           contentDescription = "Share",
+                           tint = Color.Black // Adjust the tint color as needed
+                       )
+                   }
+                   Spacer(modifier = Modifier.width(8.dp))
+                   Text(
+                       text = "Share",
+                       fontSize = 20.sp,
+                       color = Color.White,
+                       fontWeight = FontWeight.Bold // Adjust the text style as needed
+                   )
                }
+
+
+               Row(
+                   modifier = Modifier.padding(16.dp),
+                   verticalAlignment = Alignment.CenterVertically
+               ) {
+                   Box(
+                       modifier = Modifier
+                           .size(48.dp)
+                           .clip(CircleShape)
+                           .background(Color.LightGray)
+                           .clickable {
+                               navController.navigate("chat_screen")
+                           },
+                       contentAlignment = Alignment.Center
+                   ) {
+                       Icon(
+                           modifier = Modifier.padding(8.dp),
+                           painter = painterResource(id = R.drawable.baseline_help_center_24),
+                           contentDescription = "Help",
+                           tint = Color.Black // Adjust the tint color as needed
+                       )
+                   }
+                   Spacer(modifier = Modifier.width(8.dp))
+                   Text(
+                       text = "Help",
+                       fontSize = 20.sp,
+                       color = Color.White,
+                       fontWeight = FontWeight.Bold // Adjust the text style as needed
+                   )
+               }
+
 
            }
     }
@@ -325,6 +420,12 @@ fun Navigation(navController:NavController,viewModel: MainViewModel,pd:PaddingVa
         composable(Screen.DrawerScreen.Subscription.route){
           SubscriptionView()
         }
+
+        composable("chat_screen") {
+            Content(navController)
+        }
+
+
 
     }
 }

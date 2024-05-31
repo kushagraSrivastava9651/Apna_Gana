@@ -1,7 +1,6 @@
 package com.example.musicappui.ui.theme
 
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,13 +8,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -30,6 +27,8 @@ import androidx.compose.material.Text
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,13 +37,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImagePainter
-import coil.compose.ImagePainter
 import coil.compose.rememberAsyncImagePainter
 
 import com.example.musicappui.R
@@ -52,10 +49,26 @@ import com.example.musicappui.R
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeView(navController: NavController) {
-
-
     val recipeViewModel: FetchNewsViewModel = viewModel()
     val viewState by recipeViewModel.categoriesState
+
+    val categories = listOf(
+        "Live News",
+        "New Release",
+        "Favorites",
+        "Top Rated"
+    )
+
+    val shuffledLists = remember {
+        mutableStateOf<Map<String, List<Item>>>(emptyMap())
+    }
+
+    if (shuffledLists.value.isEmpty() && viewState.list.isNotEmpty()) {
+        val shuffledMap = categories.associateWith { category ->
+            viewState.list.shuffled().take(6)
+        }
+        shuffledLists.value = shuffledMap
+    }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -80,34 +93,25 @@ fun HomeView(navController: NavController) {
             }
 
             else -> {
-
-
-                val grouped =
-                    listOf<String>(
-                        "Live News",
-                        "New Release",
-                        "Favorites",
-                        "Top  Rated"
-                    ).groupBy { it[0] }
-                //  val grouped = items.groupBy { it.title.first().toUpperCase().toString() }
-
                 LazyColumn {
-                    grouped.forEach {
+                    categories.forEach { category ->
                         stickyHeader {
                             Text(
-                                text = it.value[0],
+                                text = category,
                                 modifier = Modifier
                                     .padding(16.dp)
-                                    .padding(bottom = 8.dp), // Add bottom padding for subheading spacing
+                                    .padding(bottom = 8.dp),
                                 style = MaterialTheme.typography.subtitle1
                                     .copy(
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 24.sp
-                                    ) // Set bold and medium size
+                                    )
                             )
-
+                        }
+                        item {
                             LazyRow {
-                                items(viewState.list) { item ->
+                                val itemsForCategory = shuffledLists.value[category] ?: emptyList()
+                                items(itemsForCategory) { item ->
                                     BrowserItem(
                                         item = item,
                                         drawable = item.image,
@@ -121,10 +125,10 @@ fun HomeView(navController: NavController) {
                     }
                 }
             }
-
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

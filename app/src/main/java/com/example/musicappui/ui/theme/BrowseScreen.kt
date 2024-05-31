@@ -90,11 +90,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-
-@Composable
+ @Composable
 fun BrowseView(navController: NavController, modifier: Modifier = Modifier) {
     val recipeViewModel: FetchNewsViewModel = viewModel()
     val viewState by recipeViewModel.categoriesState
+
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -146,8 +146,9 @@ fun BrowseView(navController: NavController, modifier: Modifier = Modifier) {
             }
 
             else -> {
+
                 LazyVerticalGrid(columns = GridCells.Fixed(2), modifier = Modifier.fillMaxSize()) {
-                    items(viewState.list) { item ->
+                    items( viewState.list) { item ->
                         BrowserItem(
                             item = item,
                             drawable = item.image,
@@ -161,3 +162,5 @@ fun BrowseView(navController: NavController, modifier: Modifier = Modifier) {
         }
     }
 }
+
+

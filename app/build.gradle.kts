@@ -1,9 +1,12 @@
+// app/build.gradle.kts
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-android")
-    id ("kotlin-parcelize")
+    id("kotlin-parcelize")
     id("com.google.gms.google-services")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -21,6 +24,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        // Read the API key from gradle.properties
+        buildConfigField("String", "API_KEY", "\"${project.properties["API_KEY"]}\"")
     }
 
     buildTypes {
@@ -32,19 +38,25 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     buildFeatures {
         compose = true
+        buildConfig = true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -54,9 +66,12 @@ android {
 
 dependencies {
 
-
+    implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
- 
+     // add the dependency for the Google AI client SDK for Android
+
+
+    implementation ("androidx.compose.material:material-icons-extended:1.0.0")
 
 
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
@@ -82,7 +97,9 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.9.0")
 
     implementation ("io.coil-kt:coil:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
 
+    implementation ("io.coil-kt:coil-compose:2.5.0")
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.8.0")
 
     //fire

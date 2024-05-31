@@ -98,29 +98,31 @@ onNavigateToSignUp()
     }
 
  */
-import android.widget.Toast
+
+
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     authViewModel: AuthViewModel,
@@ -129,9 +131,8 @@ fun LoginScreen(
 ) {
     val result by authViewModel.authResult.observeAsState()
     var email by remember { mutableStateOf("") }
-    var password by remember {
-        mutableStateOf("")
-    }
+    var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -140,10 +141,11 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        androidx.compose.material3.Text(
+        Text(
             text = "Sign In",
-            style = androidx.compose.material3.MaterialTheme.typography.headlineMedium.copy(
-                color = androidx.compose.material3.MaterialTheme.colorScheme.primary
+            style = MaterialTheme.typography.h4.copy(
+                color = MaterialTheme.colors.primary,
+                fontWeight = FontWeight.Bold
             ),
             modifier = Modifier.padding(bottom = 16.dp),
             textAlign = TextAlign.Center
@@ -154,8 +156,7 @@ fun LoginScreen(
             label = { Text("Email") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp)
-                .padding(horizontal = 16.dp),
+                .padding(vertical = 8.dp),
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
@@ -167,15 +168,22 @@ fun LoginScreen(
             label = { Text("Password") },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp)
-                .padding(horizontal = 16.dp),
-            visualTransformation = PasswordVisualTransformation(),
+                .padding(vertical = 8.dp),
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                val image = if (passwordVisible)
+                    Icons.Filled.Visibility
+                else Icons.Filled.VisibilityOff
+
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(imageVector = image, contentDescription = "Toggle password visibility")
+                }
+            },
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             )
         )
-     //   val context= LocalContext.current
         Button(
             onClick = {
                 authViewModel.login(email, password)
@@ -185,14 +193,9 @@ fun LoginScreen(
                     }
                     is Result.Error -> {
                         // Handle error case
- //Toast.makeText(context,"Unexpected Error, or Unauthorised User",Toast.LENGTH_SHORT).show()
                     }
                     else -> {
                         // Handle other cases
-                  //      Toast.makeText(context,"Unexpected Error, or Unauthorised User",Toast.LENGTH_SHORT).show()
-
-
-
                     }
                 }
             },
@@ -209,11 +212,14 @@ fun LoginScreen(
             modifier = Modifier.clickable {
                 onNavigateToSignUp()
             },
-            style = MaterialTheme.typography.body2,
-            color = MaterialTheme.colors.primary
+            style = MaterialTheme.typography.body2.copy(
+                color = MaterialTheme.colors.primary
+            )
         )
     }
 }
+
+
 
 @Preview(showBackground = true)
 @Composable
