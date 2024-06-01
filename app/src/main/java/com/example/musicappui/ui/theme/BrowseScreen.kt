@@ -94,10 +94,10 @@ import androidx.navigation.NavController
 fun BrowseView(navController: NavController, modifier: Modifier = Modifier) {
     val recipeViewModel: FetchNewsViewModel = viewModel()
     val viewState by recipeViewModel.categoriesState
-
+     val backgroundColor = MaterialTheme.colors.background
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(backgroundColor) ,
         contentAlignment = Alignment.Center
     ) {
         when {

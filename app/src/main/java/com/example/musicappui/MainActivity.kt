@@ -1,14 +1,18 @@
 package com.example.musicappui
 
+import android.content.Context
 import android.os.Bundle
+import android.preference.PreferenceManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.musicappui.Login_data.AuthViewModel
@@ -18,24 +22,36 @@ import com.example.musicappui.ui.MainView
 import com.example.musicappui.ui.Navigation
 
 import com.example.musicappui.ui.theme.MusicAppUITheme
+import com.example.musicappui.ui.theme.MyThemedApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
-            val navController= rememberNavController()
-            val authViewModel:AuthViewModel=viewModel()
-            MusicAppUITheme {
+            val navController = rememberNavController()
+            val authViewModel: AuthViewModel = viewModel()
+
+            val context = LocalContext.current
+
+            // Check user's preference for dark mode
+            val isDarkModeEnabled = getDarkModePreference(context)
+
+
+            MyThemedApp(isDarkModeEnabled) {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     NavigationGraph(navController = navController, authViewModel = authViewModel)
-               //   MainView()
                 }
             }
         }
     }
-}
 
+    private fun getDarkModePreference(context: Context): Boolean {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        return sharedPreferences.getBoolean("dark_mode_enabled", false)
+    }
+}

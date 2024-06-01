@@ -51,6 +51,7 @@ import com.example.musicappui.R
 fun HomeView(navController: NavController) {
     val recipeViewModel: FetchNewsViewModel = viewModel()
     val viewState by recipeViewModel.categoriesState
+    val backgroundColor = MaterialTheme.colors.background
 
     val categories = listOf(
         "Live News",
@@ -71,7 +72,7 @@ fun HomeView(navController: NavController) {
     }
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(backgroundColor),
         contentAlignment = Alignment.Center
     ) {
         when {

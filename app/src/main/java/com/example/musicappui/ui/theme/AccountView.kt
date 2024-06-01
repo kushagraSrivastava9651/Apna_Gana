@@ -1,6 +1,7 @@
 package com.example.musicappui.ui.theme
 
  import android.util.Log
+ import androidx.compose.foundation.background
  import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,8 +39,8 @@ import androidx.compose.runtime.getValue
 @Composable
 fun AccountView(viewModel: AuthViewModel) {
     val userDetails by viewModel.userDetails.observeAsState()
-
-    LaunchedEffect(Unit) {
+    val backgroundColor = androidx.compose.material.MaterialTheme.colors.background
+     LaunchedEffect(Unit) {
         viewModel.getCurrentUser()?.let {
             viewModel.fetchUserDetails(it.uid)
         }
@@ -55,7 +56,7 @@ fun AccountView(viewModel: AuthViewModel) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
+                    .padding(16.dp) .background(backgroundColor)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),

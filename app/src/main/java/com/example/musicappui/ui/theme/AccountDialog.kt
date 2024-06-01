@@ -27,6 +27,7 @@ import androidx.compose.ui.window.DialogProperties
 
 @Composable
 fun AccountDialog(dialogOpen : MutableState<Boolean>){
+
       if(dialogOpen.value){
           AlertDialog(
               onDismissRequest = {

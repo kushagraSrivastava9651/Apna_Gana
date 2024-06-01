@@ -49,6 +49,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -76,6 +77,9 @@ import com.example.musicappui.ui.theme.BrowseView
 import com.example.musicappui.ui.theme.FetchNewsViewModel
 import com.example.musicappui.ui.theme.HomeView
 import com.example.musicappui.ui.theme.Library
+import com.example.musicappui.ui.theme.MusicAppUITheme
+import com.example.musicappui.ui.theme.MyThemedApp
+import com.example.musicappui.ui.theme.SettingsScreen
 import com.example.musicappui.ui.theme.SubscriptionView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -205,7 +209,11 @@ fun MainView(navController: NavController) {
 
 
         ) {
-            Navigation(navController = controller, viewModel = viewModel, pd = it)
+            Navigation(navController = controller, viewModel = viewModel, pd = it){
+                // Content lambda: Specify what should be displayed within the Navigation composable
+                // For example, you can show a text composable:
+                Text("Navigation Content")
+            }
             AccountDialog(dialogOpen = dialogOpen)
         }
     }
@@ -272,7 +280,7 @@ fun MoreBottomSheet(modifier: Modifier,navController: NavController){
                            .clip(CircleShape)
                            .background(Color.LightGray)
                            .clickable {
-                               //navController.navigate("chat_screen")
+                               navController.navigate("settings_screen")
                            },
                        contentAlignment = Alignment.Center
                    ) {
@@ -367,22 +375,27 @@ fun MoreBottomSheet(modifier: Modifier,navController: NavController){
 }
 
 @Composable
-fun Navigation(navController:NavController,viewModel: MainViewModel,pd:PaddingValues){
-    val authViewModel: AuthViewModel = viewModel()
+fun Navigation(navController:NavController,viewModel: MainViewModel,pd:PaddingValues,  content: @Composable () -> Unit) {
 
+    val authViewModel: AuthViewModel = viewModel()
+    val darkThemeSwitchState = remember { mutableStateOf(false) }
+    val notificationSwitchState = remember { mutableStateOf(true) }
+    val context = LocalContext.current
     val userRepository = remember {
         val firebaseAuth = FirebaseAuth.getInstance()
         val firestore = FirebaseFirestore.getInstance()
         UserRepository(firebaseAuth, firestore)
     }
 
-
-    NavHost(navController = navController as NavHostController,
+/*
+    NavHost(
+        navController = navController as NavHostController,
         startDestination = Screen.DrawerScreen.Account.route,
-        modifier = Modifier.padding(pd)){
+        modifier = Modifier.padding(pd)
+    ) {
 
 
-        composable(Screen.BottomScreen.Home.bRoute){
+        composable(Screen.BottomScreen.Home.bRoute) {
             //TODO home screen
 
 
@@ -403,7 +416,7 @@ fun Navigation(navController:NavController,viewModel: MainViewModel,pd:PaddingVa
                     itemId = it.id,
                     title = it.title,
                     description = it.description,
-                       it.image
+                    it.image
 
                 )
             } ?: run {
@@ -415,30 +428,109 @@ fun Navigation(navController:NavController,viewModel: MainViewModel,pd:PaddingVa
 
 
 
-        composable(Screen.BottomScreen.Browse.bRoute){
+        composable(Screen.BottomScreen.Browse.bRoute) {
             //TODO Browse screen
             BrowseView(navController)
         }
 
-        composable(Screen.BottomScreen.Library.bRoute){
+        composable(Screen.BottomScreen.Library.bRoute) {
             //TODO Library screen
             Library()
         }
 
 
-        composable(Screen.DrawerScreen.Account.route){
+        composable(Screen.DrawerScreen.Account.route) {
 
-                     AccountView(authViewModel)
+            AccountView(authViewModel)
         }
-        composable(Screen.DrawerScreen.Subscription.route){
-          SubscriptionView()
+        composable(Screen.DrawerScreen.Subscription.route) {
+            SubscriptionView()
         }
 
         composable("chat_screen") {
             Content(navController)
         }
+        composable("settings_screen") {
+            MyThemedApp(
+                isDarkModeEnabled = darkThemeSwitchState.value,
+                content = {
+                    SettingsScreen(
+                        darkThemeSwitchState = darkThemeSwitchState,
+                        notificationSwitchState = notificationSwitchState,
+                        applyTheme = { darkModeEnabled: Boolean ->
+                            darkThemeSwitchState.value = darkModeEnabled
+                        }
+                    )
+                }
+            )
+        }
 
 
 
     }
+}
+
+ */
+
+    // Wrap the entire Navigation with MyThemedApp to apply the dark mode theme
+    MyThemedApp(
+        isDarkModeEnabled = darkThemeSwitchState.value,
+        content = {
+            NavHost(
+                navController = navController as NavHostController,
+                startDestination = Screen.DrawerScreen.Account.route,
+                modifier = Modifier.padding(pd)
+            ) {
+                // Composables for different screens
+                composable(Screen.BottomScreen.Home.bRoute) {
+                    HomeView(navController)
+                }
+                composable(
+                    route = "details/{itemId}",
+                    arguments = listOf(navArgument("itemId") { type = NavType.IntType; defaultValue = 0 })
+                ) { backStackEntry ->
+                    val fetchNewsViewModel: FetchNewsViewModel = viewModel()
+                    val categoriesState by fetchNewsViewModel.categoriesState
+                    val itemId = backStackEntry.arguments?.getInt("itemId") ?: 0
+                    val item = categoriesState.list.find { it.id == itemId }
+                    item?.let {
+                        TitleDescriptionScreen(
+                            itemId = it.id,
+                            title = it.title,
+                            description = it.description,
+                            it.image
+
+                        )
+                    } ?: run {
+
+
+                    }
+                }
+                composable(Screen.BottomScreen.Browse.bRoute) {
+                    BrowseView(navController)
+                }
+                composable(Screen.BottomScreen.Library.bRoute) {
+                    Library()
+                }
+                composable(Screen.DrawerScreen.Account.route) {
+                    AccountView(authViewModel)
+                }
+                composable(Screen.DrawerScreen.Subscription.route) {
+                    SubscriptionView()
+                }
+                composable("chat_screen") {
+                    Content(navController)
+                }
+                composable("settings_screen") {
+                    SettingsScreen(
+                        darkThemeSwitchState = darkThemeSwitchState,
+                        notificationSwitchState = notificationSwitchState,
+                        applyTheme = { darkModeEnabled: Boolean ->
+                            darkThemeSwitchState.value = darkModeEnabled
+                        }
+                    )
+                }
+            }
+        }
+    )
 }

@@ -1,12 +1,13 @@
 package com.example.musicappui.chat
-
- import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
- import android.util.Log
- import androidx.activity.compose.rememberLauncherForActivityResult
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +15,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
- import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -25,10 +26,10 @@ import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
- import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.material.Text
- import androidx.compose.material.icons.filled.ArrowBack
- import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material.CircularProgressIndicator
@@ -36,8 +37,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
- import androidx.compose.runtime.LaunchedEffect
- import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -46,15 +47,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
- import androidx.navigation.NavController
- import coil.ImageLoader
+import androidx.navigation.NavController
+import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.request.SuccessResult
- import kotlinx.coroutines.launch
+import kotlinx.coroutines.launch
 // Content.kt
 
 
@@ -98,6 +100,7 @@ fun ChatScreen(
     uiState: chatUiState,
     onSendClick: (String, List<Uri>) -> Unit
 ) {
+    val backgroundColor = androidx.compose.material.MaterialTheme.colors.background
     var userQues by rememberSaveable { mutableStateOf("") }
     val imageUris = rememberSaveable(saver = UriCustomSaver()) { mutableStateListOf<Uri>() }
     val pickMediaLauncher = rememberLauncherForActivityResult(
@@ -118,9 +121,9 @@ fun ChatScreen(
             )
         },
         bottomBar = {
-            Column {
+            Column (Modifier.background(backgroundColor)){
                 Row(
-                    modifier = Modifier.padding(vertical = 16.dp),
+                    modifier = Modifier.padding(vertical = 16.dp) ,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(
@@ -137,6 +140,7 @@ fun ChatScreen(
                         label = { Text("User Input") },
                         placeholder = { Text("Upload Image And Ask Question") },
                         modifier = Modifier.fillMaxWidth(0.83f)
+
                     )
                     IconButton(onClick = {
                         if (userQues.isNotBlank()) {
@@ -206,6 +210,8 @@ fun ChatScreen(
                         Text((uiState as chatUiState.Error).error)
                     }
                 }
+
+                else -> {}
             }
         }
     }

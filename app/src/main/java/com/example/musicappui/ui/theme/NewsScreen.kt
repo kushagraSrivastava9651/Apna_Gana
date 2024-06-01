@@ -89,7 +89,7 @@ fun TitleDescriptionScreen(itemId: Int, title: String, description: String, draw
             Text(
                 text = title,
                 style = MaterialTheme.typography.h4,
-                color = MaterialTheme.colors.primary,
+                color = Color.Magenta,
                 modifier = Modifier.padding(bottom = 8.dp),
                 textAlign = TextAlign.Center
             )
@@ -117,7 +117,7 @@ fun TitleDescriptionScreen(itemId: Int, title: String, description: String, draw
             Text(
                 text = description,
                 style = MaterialTheme.typography.body1,
-                color = MaterialTheme.colors.onBackground,
+                color = Color.Black,
                 textAlign = TextAlign.Justify,
                 modifier = Modifier.widthIn(max = 400.dp) // Limit the width for better readability
             )
