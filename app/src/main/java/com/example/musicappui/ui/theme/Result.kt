@@ -1,4 +1,4 @@
-package com.example.musicappui.Login_data
+package com.example.musicappui.ui.theme
 
 sealed class Result<out T> {
 

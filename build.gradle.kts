@@ -7,7 +7,15 @@ plugins {
 }
 
 buildscript {
+    repositories {
+        google()
+        gradlePluginPortal()
+        // other repositories if needed
+    }
     dependencies {
         classpath("com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
+        classpath ("com.android.tools.build:gradle:4.2.0")
+        classpath ("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.0")
+        classpath ("com.google.dagger:hilt-android-gradle-plugin:2.38.1")
     }
 }

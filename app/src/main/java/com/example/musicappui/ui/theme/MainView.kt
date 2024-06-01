@@ -27,20 +27,19 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.primarySurface
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.material.primarySurface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -63,23 +62,23 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.musicappui.Login_data.AuthViewModel
+import com.example.musicappui.Login_data.UserRepository
 import com.example.musicappui.MainViewModel
 import com.example.musicappui.R
 import com.example.musicappui.Screen
 import com.example.musicappui.chat.Content
-
 import com.example.musicappui.screensInBottom
 import com.example.musicappui.screensInDrawer
 import com.example.musicappui.ui.theme.AccountDialog
 import com.example.musicappui.ui.theme.AccountView
-
 import com.example.musicappui.ui.theme.BrowseView
- import com.example.musicappui.ui.theme.FetchNewsViewModel
+import com.example.musicappui.ui.theme.FetchNewsViewModel
 import com.example.musicappui.ui.theme.HomeView
 import com.example.musicappui.ui.theme.Library
 import com.example.musicappui.ui.theme.SubscriptionView
-
-
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -369,6 +368,15 @@ fun MoreBottomSheet(modifier: Modifier,navController: NavController){
 
 @Composable
 fun Navigation(navController:NavController,viewModel: MainViewModel,pd:PaddingValues){
+    val authViewModel: AuthViewModel = viewModel()
+
+    val userRepository = remember {
+        val firebaseAuth = FirebaseAuth.getInstance()
+        val firestore = FirebaseFirestore.getInstance()
+        UserRepository(firebaseAuth, firestore)
+    }
+
+
     NavHost(navController = navController as NavHostController,
         startDestination = Screen.DrawerScreen.Account.route,
         modifier = Modifier.padding(pd)){
@@ -376,8 +384,11 @@ fun Navigation(navController:NavController,viewModel: MainViewModel,pd:PaddingVa
 
         composable(Screen.BottomScreen.Home.bRoute){
             //TODO home screen
+
+
             HomeView(navController)
         }
+
 
         composable(
             route = "details/{itemId}",
@@ -396,8 +407,8 @@ fun Navigation(navController:NavController,viewModel: MainViewModel,pd:PaddingVa
 
                 )
             } ?: run {
-                // Handle case where item is not found
-                // You can navigate back or show an error message
+
+
             }
         }
 
@@ -414,8 +425,10 @@ fun Navigation(navController:NavController,viewModel: MainViewModel,pd:PaddingVa
             Library()
         }
 
+
         composable(Screen.DrawerScreen.Account.route){
-                     AccountView()
+
+                     AccountView(authViewModel)
         }
         composable(Screen.DrawerScreen.Subscription.route){
           SubscriptionView()

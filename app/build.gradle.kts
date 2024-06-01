@@ -7,6 +7,8 @@ plugins {
     id("kotlin-parcelize")
     id("com.google.gms.google-services")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+
+  //  id ("dagger.hilt.android.plugin") // For Hilt
 }
 
 android {
@@ -66,17 +68,23 @@ android {
 
 dependencies {
 
+  //  implementation ("com.google.dagger:hilt-android:2.44")
+  //  kapt ("com.google.dagger:hilt-compiler:2.44")
+  //  implementation ("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
+  //  kapt ("androidx.hilt:hilt-compiler:1.2.0")
+
+
     implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
      // add the dependency for the Google AI client SDK for Android
 
 
-    implementation ("androidx.compose.material:material-icons-extended:1.0.0")
+    implementation ("androidx.compose.material:material-icons-extended:1.6.7")
 
 
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("com.google.code.gson:gson:2.10")
+    implementation ("com.google.code.gson:gson:2.10.1")
     implementation ("androidx.core:core-ktx:1.13.1")
 
 
@@ -96,7 +104,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.0")
     implementation("androidx.activity:activity-compose:1.9.0")
 
-    implementation ("io.coil-kt:coil:2.4.0")
+    implementation ("io.coil-kt:coil:2.5.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
 
     implementation ("io.coil-kt:coil-compose:2.5.0")

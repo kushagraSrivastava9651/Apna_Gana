@@ -72,48 +72,72 @@ import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.example.musicappui.R
-
 @Composable
 fun TitleDescriptionScreen(itemId: Int, title: String, description: String, drawableResId: String) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.Top,
+        verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.h4,
-            color = MaterialTheme.colors.primary,
-            modifier = Modifier.padding(bottom = 8.dp),
-            textAlign = TextAlign.Center
-        )
-
-        // Image below title
-        val painter = // Placeholder image while loading
-            rememberAsyncImagePainter(ImageRequest.Builder // Image to show on error
-                (LocalContext.current).data(data = drawableResId).apply<ImageRequest.Builder>(block = fun ImageRequest.Builder.() {
-                placeholder(R.drawable.loading) // Placeholder image while loading
-                error(R.drawable.error) // Image to show on error
-            }).build()
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            // Title text
+            Text(
+                text = title,
+                style = MaterialTheme.typography.h4,
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier.padding(bottom = 8.dp),
+                textAlign = TextAlign.Center
             )
 
-        Image(
-            painter = painter,
-            contentDescription = null, // Provide appropriate content description
-            modifier = Modifier
-                .size(240.dp)
-                .padding(bottom = 16.dp) // Add padding below the image
-        )
+            // Image below title
+            val painter = rememberAsyncImagePainter(
+                ImageRequest.Builder(LocalContext.current)
+                    .data(data = drawableResId)
+                    .apply {
+                        placeholder(R.drawable.loading) // Placeholder image while loading
+                        error(R.drawable.error) // Image to show on error
+                    }
+                    .build()
+            )
 
-        Text(
-            text = description,
-            style = MaterialTheme.typography.body1,
-            color = MaterialTheme.colors.onBackground,
-            textAlign = TextAlign.Justify,
-            modifier = Modifier.widthIn(max = 400.dp) // Limit the width for better readability
-        )
+            Image(
+                painter = painter,
+                contentDescription = null, // Provide appropriate content description
+                modifier = Modifier
+                    .size(240.dp)
+                    .padding(bottom = 16.dp) // Add padding below the image
+            )
+
+            // Description text
+            Text(
+                text = description,
+                style = MaterialTheme.typography.body1,
+                color = MaterialTheme.colors.onBackground,
+                textAlign = TextAlign.Justify,
+                modifier = Modifier.widthIn(max = 400.dp) // Limit the width for better readability
+            )
+        }
+
+        // Brand logo or text at the bottom
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            // Logo
+            Image(
+                painter = painterResource(id = R.drawable.quick_news_logo),
+                contentDescription = null, // Provide appropriate content description
+                modifier = Modifier
+                    .size(64.dp)
+                    .padding(top = 16.dp)
+            )
+
+
+        }
     }
 }
-
