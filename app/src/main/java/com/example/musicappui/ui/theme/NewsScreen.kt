@@ -53,10 +53,14 @@ fun TitleDescriptionScreen(itemId: Int, title: String, description: String, draw
 
 
  */
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -73,74 +77,103 @@ import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.example.musicappui.R
+
 @Composable
 fun TitleDescriptionScreen(itemId: Int, title: String, description: String, drawableResId: String) {
     val backgroundColor = MaterialTheme.colors.background
+    val context = LocalContext.current
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp).background(backgroundColor),
+            .padding(16.dp)
+            .background(backgroundColor),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            // Title text
-            Text(
-                text = title,
-                style = MaterialTheme.typography.h4,
-                color = Color.Magenta,
-                modifier = Modifier.padding(bottom = 8.dp),
-                textAlign = TextAlign.Center
-            )
+        item {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                // Title text
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.h4,
+                    color = Color.Magenta,
+                    modifier = Modifier.padding(bottom = 8.dp),
+                    textAlign = TextAlign.Center
+                )
 
-            // Image below title
-            val painter = rememberAsyncImagePainter(
-                ImageRequest.Builder(LocalContext.current)
-                    .data(data = drawableResId)
-                    .apply {
-                        placeholder(R.drawable.loading) // Placeholder image while loading
-                        error(R.drawable.error) // Image to show on error
-                    }
-                    .build()
-            )
+                // Image below title
+                val painter = rememberAsyncImagePainter(
+                    ImageRequest.Builder(context)
+                        .data(data = drawableResId)
+                        .apply {
+                            placeholder(R.drawable.loading) // Placeholder image while loading
+                            error(R.drawable.error) // Image to show on error
+                        }
+                        .build()
+                )
 
-            Image(
-                painter = painter,
-                contentDescription = null, // Provide appropriate content description
-                modifier = Modifier
-                    .size(240.dp)
-                    .padding(bottom = 16.dp) // Add padding below the image
-            )
+                Image(
+                    painter = painter,
+                    contentDescription = null, // Provide appropriate content description
+                    modifier = Modifier
+                        .size(240.dp)
+                        .padding(bottom = 16.dp) // Add padding below the image
+                )
 
-            // Description text
-            Text(
-                text = description,
-                style = MaterialTheme.typography.body1,
-                color = Color.Black,
-                textAlign = TextAlign.Justify,
-                modifier = Modifier.widthIn(max = 400.dp) // Limit the width for better readability
-            )
+                // Description text
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.body1,
+                    color = Color.Black,
+                    textAlign = TextAlign.Justify,
+                    modifier = Modifier.widthIn(max = 400.dp) // Limit the width for better readability
+                )
+            }
         }
 
-        // Brand logo or text at the bottom
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom
-        ) {
-            // Logo
-            Image(
-                painter = painterResource(id = R.drawable.quick_news_logo),
-                contentDescription = null, // Provide appropriate content description
+        item {
+            // Brand logo and share button at the bottom
+            Row(
                 modifier = Modifier
-                    .size(64.dp)
-                    .padding(top = 16.dp)
-            )
-
-
+                    .fillMaxWidth()
+                    .padding(top = 16.dp, bottom = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Brand logo
+                Image(
+                    painter = painterResource(id = R.drawable.quick_news_logo),
+                    contentDescription = null, // Provide appropriate content description
+                    modifier = Modifier
+                        .size(64.dp)
+                )
+                // Share button
+                IconButton(
+                    onClick = {
+                        // Share functionality
+                        shareContent(context = context, title = title, description = description)
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_share_24), // Replace with your share icon resource ID
+                        contentDescription = "Share",
+                        tint = MaterialTheme.colors.primary
+                    )
+                }
+            }
         }
     }
+}
+
+fun shareContent(context: Context, title: String, description: String) {
+    val shareIntent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_TEXT, "$title\n\n$description")
+        type = "text/plain"
+    }
+    context.startActivity(Intent.createChooser(shareIntent, "Share via"))
 }
