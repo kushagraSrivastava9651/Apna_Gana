@@ -56,10 +56,10 @@ fun AccountView(viewModel: AuthViewModel) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp) .background(backgroundColor)
+                    .padding(16.dp)
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().background(backgroundColor),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Row {
@@ -81,7 +81,7 @@ fun AccountView(viewModel: AuthViewModel) {
                     }
                 }
 
-                Row(modifier = Modifier.padding(top = 16.dp)) {
+                Row(modifier = Modifier.padding(top = 16.dp).background(backgroundColor).fillMaxWidth()) {
                     Icon(
                         painter = painterResource(id = R.drawable.baseline_library_music_24),
                         contentDescription = "Quick News",
@@ -89,7 +89,7 @@ fun AccountView(viewModel: AuthViewModel) {
                     )
                     Text("Quick News")
                 }
-                Divider()
+                Divider(Modifier.background(Color.DarkGray))
             }
         }
         is com.example.musicappui.Login_data.Result.Error -> {

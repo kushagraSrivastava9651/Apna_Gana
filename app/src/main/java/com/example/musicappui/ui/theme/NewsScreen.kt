@@ -54,6 +54,7 @@ fun TitleDescriptionScreen(itemId: Int, title: String, description: String, draw
 
  */
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
@@ -74,10 +75,12 @@ import coil.request.ImageRequest
 import com.example.musicappui.R
 @Composable
 fun TitleDescriptionScreen(itemId: Int, title: String, description: String, drawableResId: String) {
+    val backgroundColor = MaterialTheme.colors.background
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp).background(backgroundColor),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
