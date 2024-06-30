@@ -3,6 +3,7 @@ package com.example.musicappui
 import android.content.Context
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -24,7 +25,11 @@ import com.example.musicappui.ui.Navigation
 import com.example.musicappui.ui.theme.MusicAppUITheme
 import com.example.musicappui.ui.theme.MyThemedApp
 
+
+import org.json.JSONObject
+
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,6 +52,7 @@ class MainActivity : ComponentActivity() {
                     NavigationGraph(navController = navController, authViewModel = authViewModel)
                 }
             }
+
         }
     }
 
@@ -54,4 +60,5 @@ class MainActivity : ComponentActivity() {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         return sharedPreferences.getBoolean("dark_mode_enabled", false)
     }
+
 }

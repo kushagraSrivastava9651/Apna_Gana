@@ -1,132 +1,97 @@
 package com.example.musicappui.ui.theme
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.RadioButton
+import androidx.compose.material.Text
+import androidx.compose.material3.Card
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.musicappui.R
 
-@Preview(showBackground = true)
 @Composable
 fun SubscriptionView() {
     val backgroundColor = MaterialTheme.colors.background
-    var email by remember { mutableStateOf("") }
-    var selectedPlan by remember { mutableStateOf("") }
-    var selectedGateway by remember { mutableStateOf("") }
 
-    val plans = listOf(
-        Plan("Basic Plan", "$9.99/month"),
-        Plan("Premium Plan", "$19.99/month")
-    )
-
-    val gateways = listOf(
-        "Credit Card",
-        "PayPal",
-        "Google Pay",
-        "Apple Pay"
-    )
-
-    LazyColumn(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 32.dp)
-            .background(backgroundColor),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(16.dp).background(backgroundColor)
     ) {
-        item {
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Enter your email") },
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+        // Header Section
+        Text(text = "Subscription Plans", style = MaterialTheme.typography.h4)
 
-        item {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = Color.LightGray, shape = RoundedCornerShape(8.dp))
-                    .padding(8.dp)
-            ) {
-                Text(
-                    text = "Choose a Plan",
-                    style = MaterialTheme.typography.h6.copy(
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
-                )
+        // Subscription Plans Section
+        SubscriptionPlan(name = "Basic", price = "$9.99/month")
+        SubscriptionPlan(name = "Standard", price = "$19.99/month")
+        SubscriptionPlan(name = "Premium", price = "$29.99/month")
 
-                plans.forEach { plan ->
-                    Row(
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = selectedPlan == plan.name,
-                            onClick = { selectedPlan = plan.name },
-                            modifier = Modifier.padding(end = 8.dp)
-                        )
-                        Text(text = "${plan.name} - ${plan.price}")
-                    }
-                }
-            }
-        }
+        // Payment Methods Section
+        Text(
+            text = "Accepted Payment Methods",
+            style = MaterialTheme.typography.h6,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+        PaymentMethods()
+    }
+}
 
-        item {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = Color.LightGray, shape = RoundedCornerShape(8.dp))
-                    .padding(8.dp)
-            ) {
-                Text(
-                    text = "Choose Payment Gateway",
-                    style = MaterialTheme.typography.h6.copy(
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
-                )
-
-                gateways.forEach { gateway ->
-                    Row(
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = selectedGateway == gateway,
-                            onClick = { selectedGateway = gateway },
-                            modifier = Modifier.padding(end = 8.dp)
-                        )
-                        Text(text = gateway)
-                    }
-                }
-            }
-        }
-
-        item {
-            Button(
-                onClick = {
-                    // Handle subscribe button click
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.primary)
-            ) {
-                Text(
-                    text = "Subscribe",
-                    style = MaterialTheme.typography.button.copy(color = Color.White)
-                )
+@Composable
+fun SubscriptionPlan(name: String, price: String) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(text = name, style = MaterialTheme.typography.h5)
+            Text(text = price, style = MaterialTheme.typography.body1)
+            Button(onClick = { /* Subscribe Logic */ }) {
+                Text(text = "Subscribe")
             }
         }
     }
 }
 
-data class Plan(val name: String, val price: String)
+@Composable
+fun PaymentMethods() {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(top = 8.dp)
+    ) {
+        // Add icons/logos for payment methods (e.g., Visa, Mastercard, PayPal)
+        Icon(
+            painter = painterResource(id = R.drawable.visa),
+            contentDescription = "Visa",
+            modifier = Modifier.size(48.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Icon(
+            painter = painterResource(id = R.drawable.upi),
+            contentDescription = "Mastercard",
+            modifier = Modifier.size(48.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Icon(
+            painter = painterResource(id = R.drawable.paypal),
+            contentDescription = "PayPal",
+            modifier = Modifier.size(48.dp)
+        )
+    }
+}

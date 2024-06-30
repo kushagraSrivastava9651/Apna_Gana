@@ -1,6 +1,7 @@
 package com.example.musicappui.ui
 
 
+
 import TitleDescriptionScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -130,24 +131,24 @@ fun MainView(navController: NavController) {
     val bottomBar :@Composable ()->Unit={
         if(currentScreen is Screen.DrawerScreen||currentScreen == Screen.BottomScreen.Home){
             BottomNavigation(Modifier.wrapContentSize()) {
-                    screensInBottom.forEach{
+                screensInBottom.forEach{
                         item->
-                        val isSelected=currentRoute==item.bRoute
-                        val tint =if(isSelected) Color.White
-                        else Color.Black
-                        BottomNavigationItem(
-                            selected = currentRoute==item.bRoute,
-                            onClick = {controller.navigate(item.bRoute)
-                                      title.value=item.bTitle},
-                            icon = {
+                    val isSelected=currentRoute==item.bRoute
+                    val tint =if(isSelected) Color.White
+                    else Color.Black
+                    BottomNavigationItem(
+                        selected = currentRoute==item.bRoute,
+                        onClick = {controller.navigate(item.bRoute)
+                            title.value=item.bTitle},
+                        icon = {
 
-                                Icon(tint=tint,contentDescription = item.bTitle,
-                              painter =   painterResource(id = item.icon)) },
-                                                       label = { Text(text = item.bTitle, color = tint)},
-                            selectedContentColor = Color.White,
-                            unselectedContentColor = Color.Black
-                            )
-                    }
+                            Icon(tint=tint,contentDescription = item.bTitle,
+                                painter =   painterResource(id = item.icon)) },
+                        label = { Text(text = item.bTitle, color = tint)},
+                        selectedContentColor = Color.White,
+                        unselectedContentColor = Color.Black
+                    )
+                }
             }
         }
     }
@@ -158,23 +159,23 @@ fun MainView(navController: NavController) {
         sheetShape = RoundedCornerShape(topStart = roundedCornerRadius, topEnd = roundedCornerRadius),
         sheetContent ={
 
-           MoreBottomSheet(modifier=modifier,controller)
-    } ) {
+            MoreBottomSheet(modifier=modifier,controller)
+        } ) {
         Scaffold(
             bottomBar=  bottomBar ,
             topBar = {
                 TopAppBar(title = { Text(title.value) },
                     actions = {
-                              IconButton(onClick = {
-                                  scope.launch {
-                                      if(modalSheetState.isVisible)
-                                          modalSheetState.hide()
-                                      else
-                                          modalSheetState.show()
-                                  }
-                              }) {
-                                   Icon(imageVector = Icons.Default.MoreVert,contentDescription = null)
-                              }
+                        IconButton(onClick = {
+                            scope.launch {
+                                if(modalSheetState.isVisible)
+                                    modalSheetState.hide()
+                                else
+                                    modalSheetState.show()
+                            }
+                        }) {
+                            Icon(imageVector = Icons.Default.MoreVert,contentDescription = null)
+                        }
                     },
                     navigationIcon = { IconButton(onClick = {
                         //open the drawer
@@ -260,45 +261,45 @@ fun MoreBottomSheet(modifier: Modifier,navController: NavController){
             .fillMaxWidth()
             .height(300.dp)
             .background(MaterialTheme.colors.primarySurface)){
-           Column (modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.SpaceBetween){
-               /*  Row(modifier = modifier.padding(16.dp)){
-                     Icon(modifier = Modifier.padding(8.dp),
-                  painter=   painterResource(id = R.drawable.baseline_settings_24), contentDescription = "Settings")
-                     Text(text = "Setting", fontSize = 20.sp, color = Color.White)
+        Column (modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.SpaceBetween){
+            /*  Row(modifier = modifier.padding(16.dp)){
+                  Icon(modifier = Modifier.padding(8.dp),
+               painter=   painterResource(id = R.drawable.baseline_settings_24), contentDescription = "Settings")
+                  Text(text = "Setting", fontSize = 20.sp, color = Color.White)
 
-                 }
+              }
 
-                */
+             */
 
-               Row(
-                   modifier = Modifier.padding(16.dp),
-                   verticalAlignment = Alignment.CenterVertically
-               ) {
-                   Box(
-                       modifier = Modifier
-                           .size(48.dp)
-                           .clip(CircleShape)
-                           .background(Color.LightGray)
-                           .clickable {
-                               navController.navigate("settings_screen")
-                           },
-                       contentAlignment = Alignment.Center
-                   ) {
-                       Icon(
-                           modifier = Modifier.padding(8.dp),
-                           painter = painterResource(id = R.drawable.baseline_settings_24),
-                           contentDescription = "Settings",
-                           tint = Color.Black // Adjust the tint color as needed
-                       )
-                   }
-                   Spacer(modifier = Modifier.width(8.dp))
-                   Text(
-                       text = "Settings",
-                       fontSize = 20.sp,
-                       color = Color.White,
-                       fontWeight = FontWeight.Bold // Adjust the text style as needed
-                   )
-               }
+            Row(
+                modifier = Modifier.padding(16.dp).clickable {
+                    navController.navigate("settings_screen")
+                }.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .background(Color.LightGray)
+                        ,
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        modifier = Modifier.padding(8.dp),
+                        painter = painterResource(id = R.drawable.baseline_settings_24),
+                        contentDescription = "Settings",
+                        tint = Color.Black // Adjust the tint color as needed
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Settings",
+                    fontSize = 20.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold // Adjust the text style as needed
+                )
+            }
 
             /*   Row(modifier = modifier.padding(16.dp)){
                    Icon(modifier = Modifier.padding(8.dp),
@@ -308,69 +309,69 @@ fun MoreBottomSheet(modifier: Modifier,navController: NavController){
                }
 
              */
-               Row(
-                   modifier = Modifier.padding(16.dp),
-                   verticalAlignment = Alignment.CenterVertically
-               ) {
-                   Box(
-                       modifier = Modifier
-                           .size(48.dp)
-                           .clip(CircleShape)
-                           .background(Color.LightGray)
-                           .clickable {
-                               //navController.navigate("chat_screen")
-                           },
-                       contentAlignment = Alignment.Center
-                   ) {
-                       Icon(
-                           modifier = Modifier.padding(8.dp),
-                           painter = painterResource(id = R.drawable.baseline_share_24),
-                           contentDescription = "Share",
-                           tint = Color.Black // Adjust the tint color as needed
-                       )
-                   }
-                   Spacer(modifier = Modifier.width(8.dp))
-                   Text(
-                       text = "Share",
-                       fontSize = 20.sp,
-                       color = Color.White,
-                       fontWeight = FontWeight.Bold // Adjust the text style as needed
-                   )
-               }
+            Row(
+                modifier = Modifier.padding(16.dp) .clickable {
+                    //navController.navigate("chat_screen")
+                }.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .background(Color.LightGray)
+                       ,
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        modifier = Modifier.padding(8.dp),
+                        painter = painterResource(id = R.drawable.baseline_share_24),
+                        contentDescription = "Share",
+                        tint = Color.Black // Adjust the tint color as needed
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Share",
+                    fontSize = 20.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold // Adjust the text style as needed
+                )
+            }
 
 
-               Row(
-                   modifier = Modifier.padding(16.dp),
-                   verticalAlignment = Alignment.CenterVertically
-               ) {
-                   Box(
-                       modifier = Modifier
-                           .size(48.dp)
-                           .clip(CircleShape)
-                           .background(Color.LightGray)
-                           .clickable {
-                               navController.navigate("chat_screen")
-                           },
-                       contentAlignment = Alignment.Center
-                   ) {
-                       Icon(
-                           modifier = Modifier.padding(8.dp),
-                           painter = painterResource(id = R.drawable.baseline_help_center_24),
-                           contentDescription = "Help",
-                           tint = Color.Black // Adjust the tint color as needed
-                       )
-                   }
-                   Spacer(modifier = Modifier.width(8.dp))
-                   Text(
-                       text = "Help",
-                       fontSize = 20.sp,
-                       color = Color.White,
-                       fontWeight = FontWeight.Bold // Adjust the text style as needed
-                   )
-               }
+            Row(
+                modifier = Modifier.padding(16.dp).clickable {
+                    navController.navigate("chat_screen")
+                }.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .background(Color.LightGray)
+                        ,
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        modifier = Modifier.padding(8.dp),
+                        painter = painterResource(id = R.drawable.baseline_help_center_24),
+                        contentDescription = "Help",
+                        tint = Color.Black // Adjust the tint color as needed
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Help",
+                    fontSize = 20.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold // Adjust the text style as needed
+                )
+            }
 
 
-           }
+        }
     }
 }
 
@@ -387,90 +388,90 @@ fun Navigation(navController:NavController,viewModel: MainViewModel,pd:PaddingVa
         UserRepository(firebaseAuth, firestore)
     }
 
-/*
-    NavHost(
-        navController = navController as NavHostController,
-        startDestination = Screen.DrawerScreen.Account.route,
-        modifier = Modifier.padding(pd)
-    ) {
+    /*
+        NavHost(
+            navController = navController as NavHostController,
+            startDestination = Screen.DrawerScreen.Account.route,
+            modifier = Modifier.padding(pd)
+        ) {
 
 
-        composable(Screen.BottomScreen.Home.bRoute) {
-            //TODO home screen
+            composable(Screen.BottomScreen.Home.bRoute) {
+                //TODO home screen
 
 
-            HomeView(navController)
-        }
-
-
-        composable(
-            route = "details/{itemId}",
-            arguments = listOf(navArgument("itemId") { type = NavType.IntType; defaultValue = 0 })
-        ) { backStackEntry ->
-            val fetchNewsViewModel: FetchNewsViewModel = viewModel()
-            val categoriesState by fetchNewsViewModel.categoriesState
-            val itemId = backStackEntry.arguments?.getInt("itemId") ?: 0
-            val item = categoriesState.list.find { it.id == itemId }
-            item?.let {
-                TitleDescriptionScreen(
-                    itemId = it.id,
-                    title = it.title,
-                    description = it.description,
-                    it.image
-
-                )
-            } ?: run {
-
-
+                HomeView(navController)
             }
-        }
 
 
+            composable(
+                route = "details/{itemId}",
+                arguments = listOf(navArgument("itemId") { type = NavType.IntType; defaultValue = 0 })
+            ) { backStackEntry ->
+                val fetchNewsViewModel: FetchNewsViewModel = viewModel()
+                val categoriesState by fetchNewsViewModel.categoriesState
+                val itemId = backStackEntry.arguments?.getInt("itemId") ?: 0
+                val item = categoriesState.list.find { it.id == itemId }
+                item?.let {
+                    TitleDescriptionScreen(
+                        itemId = it.id,
+                        title = it.title,
+                        description = it.description,
+                        it.image
 
-
-        composable(Screen.BottomScreen.Browse.bRoute) {
-            //TODO Browse screen
-            BrowseView(navController)
-        }
-
-        composable(Screen.BottomScreen.Library.bRoute) {
-            //TODO Library screen
-            Library()
-        }
-
-
-        composable(Screen.DrawerScreen.Account.route) {
-
-            AccountView(authViewModel)
-        }
-        composable(Screen.DrawerScreen.Subscription.route) {
-            SubscriptionView()
-        }
-
-        composable("chat_screen") {
-            Content(navController)
-        }
-        composable("settings_screen") {
-            MyThemedApp(
-                isDarkModeEnabled = darkThemeSwitchState.value,
-                content = {
-                    SettingsScreen(
-                        darkThemeSwitchState = darkThemeSwitchState,
-                        notificationSwitchState = notificationSwitchState,
-                        applyTheme = { darkModeEnabled: Boolean ->
-                            darkThemeSwitchState.value = darkModeEnabled
-                        }
                     )
+                } ?: run {
+
+
                 }
-            )
+            }
+
+
+
+
+            composable(Screen.BottomScreen.Browse.bRoute) {
+                //TODO Browse screen
+                BrowseView(navController)
+            }
+
+            composable(Screen.BottomScreen.Library.bRoute) {
+                //TODO Library screen
+                Library()
+            }
+
+
+            composable(Screen.DrawerScreen.Account.route) {
+
+                AccountView(authViewModel)
+            }
+            composable(Screen.DrawerScreen.Subscription.route) {
+                SubscriptionView()
+            }
+
+            composable("chat_screen") {
+                Content(navController)
+            }
+            composable("settings_screen") {
+                MyThemedApp(
+                    isDarkModeEnabled = darkThemeSwitchState.value,
+                    content = {
+                        SettingsScreen(
+                            darkThemeSwitchState = darkThemeSwitchState,
+                            notificationSwitchState = notificationSwitchState,
+                            applyTheme = { darkModeEnabled: Boolean ->
+                                darkThemeSwitchState.value = darkModeEnabled
+                            }
+                        )
+                    }
+                )
+            }
+
+
+
         }
-
-
-
     }
-}
 
- */
+     */
 
     // Wrap the entire Navigation with MyThemedApp to apply the dark mode theme
     MyThemedApp(
@@ -533,4 +534,5 @@ fun Navigation(navController:NavController,viewModel: MainViewModel,pd:PaddingVa
             }
         }
     )
+
 }
